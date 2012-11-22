@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <title>Tic Tac Toe</title>
+    </head>
+
+    <body>
+        <canvas id="arena" width="300" height="300">
+            Canvas not supported
+        </canvas>
+
+        <p><button id="action">Start</button></p>
+
+        <script>
+            var TttGame = {};
+            TttGame.fps = 30; // 30 fps is enough
+            TttGame.update = function() {};
+            TttGame.draw = function() {
+                Board.draw(TttGame._ctx);
+            };
+            TttGame.run = function() {
+                TttGame.update();
+                TttGame.draw();
+            };
+            TttGame.initialize = function() {
+                TttGame._ctx = $("#arena")[0].getContext("2d");
+
+                Board.initialize();
+                Board.draw(TttGame._ctx);
+            }
+
+            // the game board
+            var Board = {};
+            Board.draw = function(ctx) {
+                ctx.fillStyle="#000";
+                ctx.fillRect(0,0,Board.width,Board.height);
+            };
+            Board.initialize = function() {
+                Board.width = $("#arena").width();
+                Board.height = $("#arena").height();
+            };
+
+            // clickable area for a game piece
+            var GamePiece = {};
+
+            // displays as a O or X
+            var Nought = {};
+            var Cross = {};
+
+            $(document).ready(function() {
+                $("#action").click(function(e) {
+                    if (this.textContent == "Start") {
+                        console.log("Starting...");
+                        TttGame._procId = setInterval(TttGame.run, 1000 / TttGame.fps);
+                        this.textContent = "Stop"
+                    }
+                    else {
+                        console.log("Stopping...");
+                        clearInterval(TttGame._procId);
+                        this.textContent = "Start"
+                    };
+                });
+                TttGame.initialize();
+            });
+        </script>
+    </body>
+
+</html> 
